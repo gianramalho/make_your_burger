@@ -2,7 +2,7 @@
   <div>
     <p>Componente de mensagem</p>
     <div id="form-container">
-      <form id="burger-form">
+      <form id="burger-form" @submit="createBurger">
 
         <div class="input-container">
           <label for="name">Nome do Cliente</label>
@@ -63,10 +63,46 @@ export default{
       this.breads = data.paes
       this.beefs = data.carnes
       this.optionalsdata = data.opcionais
-    }
+    },
+    async createBurger(e) {
+      e.preventDefault()
+      const data = {
+        nome: this.name,
+        carne: this.beef,
+        pao: this.bread,
+        opcionais: Array.from(this.optionals),
+        status: "Solicitado"
+      } 
+
+      const dataJson = JSON.stringify(data)    
+
+      const req = await fetch("http://localhost:3000/burgers", {
+        method: "POST",
+        headers: { "Content-Type" : "application/json" },
+        body: dataJson
+      });
+
+      const res = await req.json()
+      console.log(res)
+
+      //mensagem do sistema
+      // this.msg = "Pedido realizado com sucesso!"
+      // // clear message
+      // setTimeout(() => this.msg = "", 3000)
+
+      this.clearInputs()
+
+    },
+    clearInputs() {
+      this.name = ""
+      this.beef = ""
+      this.bread = ""
+      this.optionals = []
+    },
   },
   mounted () {
     this.getIngredientes()
+    this.clearInputs()
   },
 }
 </script>

@@ -78,6 +78,27 @@
     }
   ],
   "burgers": [
-    
+    {
+      "nome": "Gian",
+      "carne": "Alcatra",
+      "pao": "Integral",
+      "opcionais": [
+        "Tomate"
+      ],
+      "status": "Solicitado",
+      "id": 1
+    },
+    {
+      "nome": "asdasd",
+      "carne": "Picanha",
+      "pao": "Parmesão e Orégano",
+      "opcionais": [
+        "Bacon",
+        "Cheddar",
+        "Salame"
+      ],
+      "status": "Solicitado",
+      "id": 2
+    }
   ]
 }

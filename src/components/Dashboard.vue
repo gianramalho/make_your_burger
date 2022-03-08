@@ -1,4 +1,5 @@
 <template>
+  <Message :msg="msg" v-show="msg" />
   <div id="burger-table" v-if="burgers">
     <div>
       <div id="burger-table-heading">
@@ -36,24 +37,30 @@
     <h2>Não há pedidos no momento!</h2>
   </div>
 </template>
+
 <script>
+import Message from "./Message.vue";
+
   export default {
     name: "Dashboard",
     data() {
       return {
         burgers: null,
         burger_id: null,
-        status: []
+        status: [],
+        msg: null,
       }
     },
     methods: {
       async getPedidos() {
         const req = await fetch('http://localhost:3000/burgers')
         const data = await req.json()
-        if (data.lenght > 0) {
+        if (data.length > 0) {
           this.burgers = data
+          this.getStatus()
+        } else {
+          this.burgers = null
         }
-        this.getStatus()
       },
       async getStatus() {
         const req = await fetch('http://localhost:3000/status')
@@ -64,8 +71,9 @@
         const req = await fetch(`http://localhost:3000/burgers/${id}`, {
           method: "DELETE"
         });
-        const res = await req.json()
         this.getPedidos()
+        this.msg = `Pedido cancelado com sucesso!`
+        this.clearMsgInTime(3000)
       },
       async updateBurger(event, id) {
         const option = event.target.value;
@@ -76,11 +84,19 @@
           body: dataJson
         });
         const res = await req.json()
-      }
+        this.msg = `Pedido Nº ${res.id} atualizado para ${res.status}!`
+        this.clearMsgInTime(3000)
+      },
+      async clearMsgInTime(timeInMs) {
+        setTimeout(() => this.msg = "", timeInMs)
+      },
     },
     mounted () {
-    this.getPedidos()
-    }
+      this.getPedidos()
+    },
+    components: {
+      Message,
+    },
   }
 </script>
 
